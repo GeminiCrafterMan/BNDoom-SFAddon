@@ -1,0 +1,63 @@
+class SFMegaBuster : BusterBase
+{
+	// No need for A_SetElementTranslation.
+	// No need for A_EmotionCheck.
+	action void A_FireChargeShot()
+	{
+		// Cast and null-check the class:
+		let boi = SFMegaPlayer(self);
+		if (!boi)
+			return;
+
+		A_FireProjectile("MaxChargeBusterTracer", frandom(-1.425, 1.425), 0, 4, 0, 0, frandom(-1.425, 1.425));
+		A_StartSound("weapons/buster/pew", CHAN_WEAPON);
+		A_Overlay(-3, "Flash");	// Flash layer
+	}
+	Default
+	{
+		Tag "SF Buster";
+	}
+	States
+	{
+		Ready:
+			NBST A 1 {
+				A_WeaponReady(WRF_ALLOWZOOM|WRF_ALLOWUSER1);
+				A_OverlayFlags(5, PSPF_POWDOUBLE|PSPF_CVARFAST, true);
+				A_OverlayFlags(-1, PSPF_POWDOUBLE|PSPF_CVARFAST, true);
+				A_Overlay(5,"ChargeSoundFunction"); //Starts charge sound.
+				A_Overlay(-1, "ChargeEffectFunction"); // starts charge effect
+				A_GiveInventory("PrimaryCharge", 1);
+			}
+			Loop;
+		Select:
+			TNT1 A 0 A_Overlay(99,"TopLayer");
+			TNT1 A 0 A_SetInventory("PrimaryCharge", 0);
+			NBST A 1 A_Raise;
+			Loop;
+		Fire:
+			NBST A 0 A_JumpIfInventory("PrimaryCharge", 100, "FireChargeShot");
+			NBST A 0 A_JumpIfInventory("PrimaryCharge", 50, "FireMidChargeShot");
+			Goto FireNormalShot;
+		FireChargeShot:
+			NBST A 1 {
+				A_SetInventory("PrimaryCharge", 0);
+				A_GiveInventory("Firing", 1);
+			}
+			NBST B 1 Bright A_FireChargeShot;
+			Goto Fired;
+		FireNormalShot:
+			NBST A 1 A_SetInventory("PrimaryCharge", 0);
+			NBST A 0 A_GiveInventory("Firing", 1);
+			NBST B 1 Bright {
+				A_FireProjectile("UnchargedBusterTracer", frandom(-1.425, 1.425), 0, 4, 0, 0, frandom(-1.425, 1.425));
+				A_StartSound("weapons/buster/pew", CHAN_WEAPON);
+				A_Overlay(-3, "Flash");	// Flash layer
+			}
+			NBST C 1 Bright;
+			NBST C 0 A_ReFire("FireNormalShot");
+			Goto Fired;
+		Flash:
+			BSFL ABCD 1 Bright;
+			Stop;
+	}
+}

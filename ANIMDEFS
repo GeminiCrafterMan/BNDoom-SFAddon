@@ -1,0 +1,9 @@
+texture optional SFMMFAC1
+	pic	SFMMFAC1 tics 40
+	pic SFMMFAC2 tics 1
+	pic SFMMFAC3 tics 5
+	pic SFMMFAC2 tics 2
+	pic SFMMFAC1 tics 100
+	pic SFMMFAC2 tics 1
+	pic SFMMFAC3 tics 5
+	pic SFMMFAC2 tics 2
