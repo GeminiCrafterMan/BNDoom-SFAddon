@@ -1,0 +1,16 @@
+Model SFMegaPlayer
+{
+	Path "Models/Player"
+	Model 0 "pl000.obj"
+	AngleOffset 90
+	Offset 0 0 20
+	Scale 3.25 3.25 3.25
+
+	FrameIndex BMEG A 0 0
+	FrameIndex BMEG B 0 0
+	FrameIndex BMEG C 0 0
+	FrameIndex BMEG D 0 0
+	FrameIndex BMEG E 0 0
+	FrameIndex BMEG F 0 0
+	FrameIndex BMEG G 0 0
+}
